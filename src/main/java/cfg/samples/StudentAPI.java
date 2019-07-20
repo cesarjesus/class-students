@@ -32,6 +32,9 @@ public class StudentAPI {
 	@GetMapping("/{id}")
 	public ResponseEntity<Student> findById(@PathVariable Long id) {
 		Optional<Student> student = studentService.findById(id);
+		if (!student.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
 		return ResponseEntity.ok(student.get());
 	}
 	
@@ -42,12 +45,20 @@ public class StudentAPI {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Student> update(@PathVariable Long id, @Valid @RequestBody Student student) {
+		Optional<Student> st = studentService.findById(id);
+		if (!st.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
 		return ResponseEntity.ok(studentService.save(student));
 	}
 	
 	@SuppressWarnings("rawtypes")
 	@DeleteMapping("/{id}")
 	public ResponseEntity delete(@PathVariable Long id) {
+		Optional<Student> student = studentService.findById(id);
+		if (!student.isPresent() ) {
+			return ResponseEntity.notFound().build();
+		}
 		studentService.deleteById(id);
 		return ResponseEntity.ok().build();
 	}

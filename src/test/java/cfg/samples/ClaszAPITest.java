@@ -71,6 +71,10 @@ public class ClaszAPITest {
 		mockMvc.perform(get("/api/v1/class/1B1C"))
 			.andExpect(status().isOk())
 			.andExpect(content().json("{\"code\":\"1B1C\",\"title\":\"Math\",\"description\":\"What Math is?\"}"));
+		
+		when(claszService.findById("X1Z1")).thenReturn(Optional.<Clasz>empty());
+		mockMvc.perform(get("/api/v1/class/X1Z1"))
+			.andExpect(status().isNotFound());
 	}
 
 }
