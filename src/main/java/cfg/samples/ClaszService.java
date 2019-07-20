@@ -3,18 +3,15 @@ package cfg.samples;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ClaszService {
 
 	private final ClaszRepository claszRepository;
-	
-	@Autowired
-	public ClaszService(ClaszRepository claszRepository) {
-		this.claszRepository = claszRepository;
-	}
 	
 	public List<Clasz> findAll() {
 		return claszRepository.findAll();

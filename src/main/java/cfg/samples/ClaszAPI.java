@@ -16,16 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/class")
 public class ClaszAPI {
 
 	private final ClaszService claszService;
-	
-	@Autowired
-	public ClaszAPI(ClaszService claszService) {
-		this.claszService = claszService;
-	}
 	
 	@GetMapping
 	public ResponseEntity<List<Clasz>> findAll() {
