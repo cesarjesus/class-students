@@ -1,63 +1,76 @@
 package cfg.samples;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.mockito.BDDMockito.given;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@WebMvcTest(value = StudentAPI.class)
 public class StudentAPITest {
 
+	@Autowired
 	private MockMvc mockMvc;
 	
-	@Autowired
-	private StudentAPI studentAPI;
+	@MockBean
+	private StudentService studentService;
 
-	public void setup() throws Exception {
-		this.mockMvc = MockMvcBuilders.standaloneSetup(this.studentAPI).build();
-	}
+	private List<Student> students;
 	
-	//@Test
-	public void testFindAll() throws Exception {
-		Student student1 = new Student();
-		student1.setId(1L);
-		student1.setFirstName("Jhon");
-		student1.setLastName("Proctoc");
+	@Before
+	public void setup() throws Exception {
+		students = new ArrayList<Student>();
+		Student student = new Student();
+		student.setId(1L);
+		student.setFirstName("Jhon");
+		student.setLastName("Proctor");
+		students.add(student);
 		
-		Student student2 = new Student();
-		student2.setId(2L);
-		student2.setFirstName("Pedro");
-		student2.setLastName("Picapiedra");
+		student = new Student();
+		student.setId(2L);
+		student.setFirstName("Pedro");
+		student.setLastName("Picapiedra");
+		students.add(student);
 		
-		List<Student> students = Arrays.asList(student1, student2);
-		given(studentAPI.findAll()).willReturn(ResponseEntity.ok(students));
-		
-		mockMvc.perform(get("/api/v1/students"))
-			.andExpect(status().isOk())
-			.andExpect(content().json("[{\"id\":1,\"firstName\":\"Jhon\",\"lastName\":\"Proctor\"},{\"id\":2,\"firstName\":\"Pedro\",\"lastName\":\"Picapiedra\"}]"));
+		student = new Student();
+		student.setId(26L);
+		student.setFirstName("Ernesto");
+		student.setLastName("Piero");
+		students.add(student);
 	}
 	
 	@Test
-	public void testFindById() {
-		assertTrue(true);
+	public void findAllTest() throws Exception {
+		when(studentService.findAll()).thenReturn(new ArrayList<Student>());
+		mockMvc.perform(get("/api/v1/students"))
+			.andExpect(status().isOk())
+			.andExpect(content().json("[]"));
+		
+		when(studentService.findAll()).thenReturn(students);
+		mockMvc.perform(get("/api/v1/students"))
+			.andExpect(status().isOk())
+			.andExpect(content().json("[{\"id\":1,\"firstName\":\"Jhon\",\"lastName\":\"Proctor\"},{\"id\":2,\"firstName\":\"Pedro\",\"lastName\":\"Picapiedra\"},{\"id\":26,\"firstName\":\"Ernesto\",\"lastName\":\"Piero\"}]"));
+	}
+	
+	@Test
+	public void findByIdTest() throws Exception {
+		when(studentService.findById(26L)).thenReturn(Optional.of(students.get(2)));
+		mockMvc.perform(get("/api/v1/students/26"))
+			.andExpect(status().isOk())
+			.andExpect(content().json("{\"id\":26,\"firstName\":\"Ernesto\",\"lastName\":\"Piero\"}"));
 	}
 
 }

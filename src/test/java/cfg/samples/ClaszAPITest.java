@@ -1,6 +1,5 @@
 package cfg.samples;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -67,7 +66,7 @@ public class ClaszAPITest {
 	}
 	
 	@Test
-	public void testfindByCode() throws Exception {
+	public void findByCodeTest() throws Exception {
 		when(claszService.findById("1B1C")).thenReturn(Optional.of(claszs.get(1)));
 		mockMvc.perform(get("/api/v1/class/1B1C"))
 			.andExpect(status().isOk())
