@@ -1,5 +1,6 @@
 package cfg.samples;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +61,42 @@ public class StudentAPI {
 			return ResponseEntity.notFound().build();
 		}
 		studentService.deleteById(id);
+		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/{id}/enrollment")
+	public ResponseEntity<List<Clasz>> findAllEnrollment(@PathVariable Long id) {
+		Optional<Student> student = studentService.findById(id);
+		if (!student.isPresent() ) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		List<Clasz> enrollments = new ArrayList<Clasz>(student.get().getClaszs());
+		return ResponseEntity.ok(enrollments);
+	}
+	
+	@GetMapping("/{id}/enrollment/{code}")
+	public ResponseEntity<Clasz> findEnrollment(@PathVariable Long id, @PathVariable String code) {
+		Optional<Student> student = studentService.findById(id);
+		if (!student.isPresent() ) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		Optional<Clasz> enrollment = studentService.findEnrollment(id, code);
+		if (!enrollment.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		return ResponseEntity.ok(enrollment.get());
+	}
+	
+	@PostMapping("/{id}/enrollment/{code}")
+	public ResponseEntity addEnrollment(@PathVariable Long id, @PathVariable String code) {
+		Optional<Student> student = studentService.findById(id);
+		if (!student.isPresent() ) {
+			return ResponseEntity.notFound().build();
+		}
+		
 		return ResponseEntity.ok().build();
 	}
 }
