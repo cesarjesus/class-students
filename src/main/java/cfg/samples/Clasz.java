@@ -1,9 +1,14 @@
 package cfg.samples;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -16,4 +21,8 @@ public class Clasz {
 	private String code;
 	private String title;
 	private String description;
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "claszs")
+	private Set<Student> students;
 }
