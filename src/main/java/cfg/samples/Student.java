@@ -31,4 +31,8 @@ public class Student {
 		joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"), 
 		inverseJoinColumns = @JoinColumn(name ="class_code", referencedColumnName = "code"))
 	private Set<Clasz> claszs;
+	
+	public void addEnrollment(Clasz clasz) {
+		claszs.add(clasz);
+	}
 }

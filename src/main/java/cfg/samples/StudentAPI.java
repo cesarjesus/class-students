@@ -82,7 +82,7 @@ public class StudentAPI {
 			return ResponseEntity.notFound().build();
 		}
 		
-		Optional<Clasz> enrollment = studentService.findEnrollment(id, code);
+		Optional<Clasz> enrollment = studentService.findEnrollmentForStudent(id, code);
 		if (!enrollment.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -90,6 +90,7 @@ public class StudentAPI {
 		return ResponseEntity.ok(enrollment.get());
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping("/{id}/enrollment/{code}")
 	public ResponseEntity addEnrollment(@PathVariable Long id, @PathVariable String code) {
 		Optional<Student> student = studentService.findById(id);
@@ -97,6 +98,7 @@ public class StudentAPI {
 			return ResponseEntity.notFound().build();
 		}
 		
+		studentService.addEnrollmentForStudent(id, code);
 		return ResponseEntity.ok().build();
 	}
 }
