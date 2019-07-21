@@ -1,6 +1,5 @@
 package cfg.samples;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,24 +64,24 @@ public class StudentAPI {
 	}
 	
 	@GetMapping("/{id}/enrollment")
-	public ResponseEntity<List<Clasz>> findAllEnrollment(@PathVariable Long id) {
+	public ResponseEntity<List<String>> findAllEnrollment(@PathVariable Long id) {
 		Optional<Student> student = studentService.findById(id);
 		if (!student.isPresent() ) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		List<Clasz> enrollments = new ArrayList<Clasz>(student.get().getClaszs());
+		List<String> enrollments = studentService.findAllEnrollments(id);
 		return ResponseEntity.ok(enrollments);
 	}
 	
 	@GetMapping("/{id}/enrollment/{code}")
-	public ResponseEntity<Clasz> findEnrollment(@PathVariable Long id, @PathVariable String code) {
+	public ResponseEntity<String> findEnrollment(@PathVariable Long id, @PathVariable String code) {
 		Optional<Student> student = studentService.findById(id);
 		if (!student.isPresent() ) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		Optional<Clasz> enrollment = studentService.findEnrollmentForStudent(id, code);
+		Optional<String> enrollment = studentService.findEnrollmentForStudent(id, code);
 		if (!enrollment.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}

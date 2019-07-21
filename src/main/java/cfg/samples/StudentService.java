@@ -40,16 +40,21 @@ public class StudentService {
 	public void deleteById(Long id) {
 		studentRepository.deleteById(id);
 	}
-	
-	public Optional<Clasz> findEnrollmentForStudent(Long id, String code) {
+
+	public List<String> findAllEnrollments(Long id) {
+		return studentRepository.findAllEnrollmentsForStudent(id);
+	}
+
+	public Optional<String> findEnrollmentForStudent(Long id, String code) {
 		return studentRepository.findEnrollmentForStudent(id, code);
 	}
-	
+
 	public void addEnrollmentForStudent(Long id, String code) {
 		Optional<Student> student = studentRepository.findById(id);
 		Optional<Clasz> clasz = claszRepository.findById(code);
 		if (student.isPresent() && clasz.isPresent()) {
 			student.get().addEnrollment(clasz.get());
+			studentRepository.save(student.get());
 		}
 	}
 }
