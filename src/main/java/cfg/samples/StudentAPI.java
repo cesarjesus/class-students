@@ -100,4 +100,16 @@ public class StudentAPI {
 		studentService.addEnrollmentForStudent(id, code);
 		return ResponseEntity.ok().build();
 	}
+
+	@SuppressWarnings("rawtypes")
+	@DeleteMapping("/{id}/enrollment/{code}")
+	public ResponseEntity removeEnrollment(@PathVariable Long id, @PathVariable String code){
+		Optional<Student> student = studentService.findById(id);
+		if (!student.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		studentService.removeEnrollmentForStudent(id, code);
+		return ResponseEntity.ok().build();
+	}
 }

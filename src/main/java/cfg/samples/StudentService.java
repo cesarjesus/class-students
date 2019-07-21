@@ -57,4 +57,13 @@ public class StudentService {
 			studentRepository.save(student.get());
 		}
 	}
+	
+	public void removeEnrollmentForStudent(Long id, String code) {
+		Optional<Student> student = studentRepository.findById(id);
+		Optional<Clasz> clasz = claszRepository.findById(code);
+		if (student.isPresent() && clasz.isPresent()) {
+			student.get().removeEnrollment(clasz.get());
+			studentRepository.save(student.get());
+		}
+	}
 }

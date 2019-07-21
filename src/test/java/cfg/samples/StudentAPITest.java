@@ -96,7 +96,7 @@ public class StudentAPITest {
 			.andExpect(content().json("{\"id\":12, \"firstName\": \"Maria\", \"lastName\": \"Suarez\"}"));
 	}
 
-	@Test
+	//@Test
 	public void updateTest() throws Exception {
 		Student st = new Student();
 		st.setId(2L);

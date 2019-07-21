@@ -39,4 +39,8 @@ public class ClaszService {
 	public void deleteById(String code) {
 		claszRepository.deleteById(code);
 	}
+	
+	public List<Long> findAllEnrollsByCode(String code) {
+		return claszRepository.findAllEnrollsByCode(code);
+	}
 }

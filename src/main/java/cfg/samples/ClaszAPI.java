@@ -62,4 +62,15 @@ public class ClaszAPI {
 		claszService.deleteById(code);
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping("/{code}/enrolls")
+	public ResponseEntity<List<Long>> findAllEnrollsByCode(@PathVariable String code) {
+		Optional<Clasz> clasz = claszService.findById(code);
+		if (!clasz.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		List<Long> enrolls = claszService.findAllEnrollsByCode(code);
+		return ResponseEntity.ok(enrolls);
+	}
 }
