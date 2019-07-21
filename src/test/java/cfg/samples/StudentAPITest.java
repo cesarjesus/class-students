@@ -104,16 +104,16 @@ public class StudentAPITest {
 		st.setLastName("Sarmiento");
 		
 		when(studentService.findById(2L)).thenReturn(Optional.of(students.get(1)));
-		when(studentService.save(st)).thenReturn(st);
+		when(studentService.update(2L, st)).thenReturn(st);
 		mockMvc.perform(put("/api/v1/students/2")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"id\":2, \"firstName\": \"Pedro\", \"lastName\": \"Sarmiento\"}"))
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content("{\"firstName\": \"Pedro\", \"lastName\": \"Sarmiento\"}"))
 			.andExpect(status().isOk())
 			.andExpect(content().json("{\"id\":2, \"firstName\": \"Pedro\", \"lastName\": \"Sarmiento\"}"));
 		
 		mockMvc.perform(put("/api/v1/students/33")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"id\":2, \"firstName\": \"Pedro\", \"lastName\": \"Sarmiento\"}"))
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content("{\"firstName\": \"Pedro\", \"lastName\": \"Sarmiento\"}"))
 			.andExpect(status().isNotFound());
 	}
 	

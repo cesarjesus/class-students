@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +49,7 @@ public class ClaszAPI {
 		if (!cl.isPresent() ) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(claszService.save(clasz));
+		return ResponseEntity.ok(claszService.update(code, clasz));
 	}
 	
 	@SuppressWarnings("rawtypes")

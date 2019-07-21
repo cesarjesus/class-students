@@ -50,7 +50,7 @@ public class StudentAPI {
 		if (!st.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(studentService.save(student));
+		return ResponseEntity.ok(studentService.update(id, student));
 	}
 	
 	@SuppressWarnings("rawtypes")

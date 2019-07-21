@@ -2,7 +2,6 @@ package cfg.samples;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -27,6 +26,17 @@ public class StudentService {
 		return studentRepository.save(student);
 	}
 	
+	public Student update(Long id, Student student) {
+		return studentRepository.findById(id)
+			.map(st -> {
+				st.setId(id);
+				st.setFirstName(student.getFirstName());
+				st.setLastName(student.getLastName());
+				return studentRepository.save(st);
+			})
+			.get();
+	}
+
 	public void deleteById(Long id) {
 		studentRepository.deleteById(id);
 	}

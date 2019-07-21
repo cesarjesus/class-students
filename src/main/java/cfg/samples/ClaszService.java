@@ -25,6 +25,17 @@ public class ClaszService {
 		return claszRepository.save(clasz);
 	}
 	
+	public Clasz update(String code, Clasz clasz) {
+		return claszRepository.findById(code)
+				.map(cl -> {
+					cl.setCode(code);
+					cl.setTitle(clasz.getTitle());
+					cl.setDescription(clasz.getDescription());
+					return claszRepository.save(cl);
+				})
+				.get();
+	}
+
 	public void deleteById(String code) {
 		claszRepository.deleteById(code);
 	}
