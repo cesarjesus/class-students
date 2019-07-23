@@ -30,7 +30,7 @@ It will run at http://localhost:8080, by default the storage back-end is in memo
 
 **Course enrollment**
 
-* Endpoint: /api/v1/course/{id}/enrollment
+* Endpoint: /api/v1/course/{code}/enrollment
 * To add a student into a course
 * POST: /api/v1/course/{course-code}/enrollment/{student-id}
 * To remove an enrollment
