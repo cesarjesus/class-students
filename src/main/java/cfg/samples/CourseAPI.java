@@ -20,57 +20,57 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/class")
-public class ClaszAPI {
+public class CourseAPI {
 
-	private final ClaszService claszService;
+	private final CourseService courseService;
 	
 	@GetMapping
-	public ResponseEntity<List<Clasz>> findAll() {
-		return ResponseEntity.ok(claszService.findAll());
+	public ResponseEntity<List<Course>> findAll() {
+		return ResponseEntity.ok(courseService.findAll());
 	}
 	
 	@GetMapping("/{code}")
-	public ResponseEntity<Clasz> findById(@PathVariable String code) {
-		Optional<Clasz> clasz = claszService.findById(code);
-		if (!clasz.isPresent()) {
+	public ResponseEntity<Course> findById(@PathVariable String code) {
+		Optional<Course> course = courseService.findById(code);
+		if (!course.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(clasz.get());
+		return ResponseEntity.ok(course.get());
 	}
 	
 	@PostMapping
-	public ResponseEntity<Clasz> create(@Valid @RequestBody Clasz clasz) {
-		return ResponseEntity.ok(claszService.save(clasz));
+	public ResponseEntity<Course> create(@Valid @RequestBody Course course) {
+		return ResponseEntity.ok(courseService.save(course));
 	}
 	
 	@PutMapping("/{code}")
-	public ResponseEntity<Clasz> update(@PathVariable String code, @Valid @RequestBody Clasz clasz) {
-		Optional<Clasz> cl = claszService.findById(code);
+	public ResponseEntity<Course> update(@PathVariable String code, @Valid @RequestBody Course course) {
+		Optional<Course> cl = courseService.findById(code);
 		if (!cl.isPresent() ) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(claszService.update(code, clasz));
+		return ResponseEntity.ok(courseService.update(code, course));
 	}
 	
 	@SuppressWarnings("rawtypes")
 	@DeleteMapping("/{code}")
 	public ResponseEntity delete(@PathVariable String code) {
-		Optional<Clasz> cl = claszService.findById(code);
+		Optional<Course> cl = courseService.findById(code);
 		if (!cl.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		claszService.deleteById(code);
+		courseService.deleteById(code);
 		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping("/{code}/enrolls")
 	public ResponseEntity<List<Long>> findAllEnrollsByCode(@PathVariable String code) {
-		Optional<Clasz> clasz = claszService.findById(code);
-		if (!clasz.isPresent()) {
+		Optional<Course> course = courseService.findById(code);
+		if (!course.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		List<Long> enrolls = claszService.findAllEnrollsByCode(code);
+		List<Long> enrolls = courseService.findAllEnrollsByCode(code);
 		return ResponseEntity.ok(enrolls);
 	}
 }

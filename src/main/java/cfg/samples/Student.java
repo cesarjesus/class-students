@@ -35,16 +35,16 @@ public class Student {
 	@JoinTable(name = "enrollment", 
 		joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"), 
 		inverseJoinColumns = @JoinColumn(name ="class_code", referencedColumnName = "code"))
-	private Set<Clasz> claszs;
+	private Set<Course> courses;
 	
-	public void addEnrollment(Clasz clasz) {
-		claszs.add(clasz);
-		clasz.getStudents().add(this);
+	public void addEnrollment(Course course) {
+		courses.add(course);
+		course.getStudents().add(this);
 	}
 
-	public void removeEnrollment(Clasz clasz) {
-		claszs.remove(clasz);
-		clasz.getStudents().remove(this);
+	public void removeEnrollment(Course course) {
+		courses.remove(course);
+		course.getStudents().remove(this);
 	}
 
 	@Override

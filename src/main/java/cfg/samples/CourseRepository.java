@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ClaszRepository extends JpaRepository<Clasz, String> {
+public interface CourseRepository extends JpaRepository<Course, String> {
 
 	@Query(value = "SELECT st.id FROM student st "
 			+ "INNER JOIN enrollment enr on enr.student_id = st.id "

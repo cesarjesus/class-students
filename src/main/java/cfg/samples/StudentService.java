@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class StudentService {
 
 	private final StudentRepository studentRepository;
-	private final ClaszRepository claszRepository;
+	private final CourseRepository courseRepository;
 	
 	public List<Student> findAll() {
 		return studentRepository.findAll();
@@ -51,18 +51,18 @@ public class StudentService {
 
 	public void addEnrollmentForStudent(Long id, String code) {
 		Optional<Student> student = studentRepository.findById(id);
-		Optional<Clasz> clasz = claszRepository.findById(code);
-		if (student.isPresent() && clasz.isPresent()) {
-			student.get().addEnrollment(clasz.get());
+		Optional<Course> course = courseRepository.findById(code);
+		if (student.isPresent() && course.isPresent()) {
+			student.get().addEnrollment(course.get());
 			studentRepository.save(student.get());
 		}
 	}
 	
 	public void removeEnrollmentForStudent(Long id, String code) {
 		Optional<Student> student = studentRepository.findById(id);
-		Optional<Clasz> clasz = claszRepository.findById(code);
-		if (student.isPresent() && clasz.isPresent()) {
-			student.get().removeEnrollment(clasz.get());
+		Optional<Course> course = courseRepository.findById(code);
+		if (student.isPresent() && course.isPresent()) {
+			student.get().removeEnrollment(course.get());
 			studentRepository.save(student.get());
 		}
 	}
