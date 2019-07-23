@@ -1,4 +1,4 @@
-package cfg.samples;
+package cfg.samples.repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import cfg.samples.domain.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Long>{
 

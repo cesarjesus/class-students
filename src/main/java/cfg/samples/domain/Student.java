@@ -1,4 +1,4 @@
-package cfg.samples;
+package cfg.samples.domain;
 
 import java.util.Set;
 

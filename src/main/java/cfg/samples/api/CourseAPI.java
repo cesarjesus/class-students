@@ -1,4 +1,4 @@
-package cfg.samples;
+package cfg.samples.api;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cfg.samples.domain.Course;
+import cfg.samples.service.CourseService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

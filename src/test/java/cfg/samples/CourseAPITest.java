@@ -18,6 +18,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import cfg.samples.api.CourseAPI;
+import cfg.samples.domain.Course;
+import cfg.samples.service.CourseService;
+
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = CourseAPI.class)
 public class CourseAPITest {

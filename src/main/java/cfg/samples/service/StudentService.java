@@ -1,10 +1,14 @@
-package cfg.samples;
+package cfg.samples.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import cfg.samples.domain.Course;
+import cfg.samples.domain.Student;
+import cfg.samples.repository.CourseRepository;
+import cfg.samples.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
