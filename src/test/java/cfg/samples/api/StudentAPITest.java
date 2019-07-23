@@ -1,4 +1,4 @@
-package cfg.samples;
+package cfg.samples.api;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
