@@ -22,22 +22,22 @@ It will run at http://localhost:8080, by default the storage back-end is in memo
 **Class**
 
 * Class code is not auto-generated and must be especified at creation time.
-* Endpoint: /api/v1/class
-* GET /api/v1/class ; /api/v1/class/{code}
+* Endpoint: /api/v1/course
+* GET /api/v1/course ; /api/v1/class/{code}
 * POST: `{"code":"01C", "title":"Ciense", "description":"A Ciense course"}`
-* PUT /api/v1/class/{code}
-* DELETE /api/v1/class/{code}
+* PUT /api/v1/course/{code}
+* DELETE /api/v1/course/{code}
 
 **Student enrollment**
 
 * Endpoint: /api/v1/students/{id}/enrollment
-* To add a student into a class
-* POST: /api/v1/students/{id}/enrollment/{class-code}
+* To add a student into a course
+* POST: /api/v1/students/{id}/enrollment/{couse-code}
 * To remove an enrollment
-* DELETE: /api/v1/students/{id}/enrollment/{class-code}
+* DELETE: /api/v1/students/{id}/enrollment/{course-code}
 
 **Class enrolls**
 
-* Endpoint: /api/v1/class/{code}/enrolls
-* To get class enrolls
-* GET /api/v1/class/{code}/enrolls
+* Endpoint: /api/v1/course/{code}/enrolls
+* To get course enrolls
+* GET /api/v1/course/{code}/enrolls
