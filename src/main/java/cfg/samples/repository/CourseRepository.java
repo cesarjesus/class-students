@@ -14,5 +14,5 @@ public interface CourseRepository extends JpaRepository<Course, String> {
 			+ "INNER JOIN enrollment enr on enr.student_id = st.id "
 			+ "WHERE enr.class_code = :code",
 			nativeQuery = true)
-	List<Long> findAllEnrollsByCode(@Param("code") String code);
+	List<Long> findAllEnrollmentsByCode(@Param("code") String code);
 }

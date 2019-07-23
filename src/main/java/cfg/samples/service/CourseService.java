@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import cfg.samples.domain.Course;
 import cfg.samples.repository.CourseRepository;
+import cfg.samples.service.exceptions.CourseNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -19,30 +20,33 @@ public class CourseService {
 		return courseRepository.findAll();
 	}
 	
-	public Optional<Course> findById(String code) {
-		return courseRepository.findById(code);
+	public Course findById(String code) throws CourseNotFoundException {
+		Optional<Course> course = courseRepository.findById(code);
+		if (!course.isPresent()) {
+			throw new CourseNotFoundException();
+		}
+
+		return course.get();
 	}
 	
 	public Course save(Course course) {
 		return courseRepository.save(course);
 	}
 	
-	public Course update(String code, Course course) {
-		return courseRepository.findById(code)
-				.map(cl -> {
-					cl.setCode(code);
-					cl.setTitle(course.getTitle());
-					cl.setDescription(course.getDescription());
-					return courseRepository.save(cl);
-				})
-				.get();
+	public Course update(String code, Course course) throws CourseNotFoundException {
+		Course co = this.findById(code);
+		co.setTitle(course.getTitle());
+		co.setDescription(course.getDescription());
+		return courseRepository.save(co);
 	}
 
-	public void deleteById(String code) {
+	public void deleteById(String code) throws CourseNotFoundException {
+		this.findById(code);
 		courseRepository.deleteById(code);
 	}
 	
-	public List<Long> findAllEnrollsByCode(String code) {
-		return courseRepository.findAllEnrollsByCode(code);
+	public List<Long> findAllEnrollmentsByCode(String code) throws CourseNotFoundException {
+		this.findById(code);
+		return courseRepository.findAllEnrollmentsByCode(code);
 	}
 }
