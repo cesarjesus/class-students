@@ -1,5 +1,7 @@
 package cfg.samples.api;
 
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +23,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import cfg.samples.api.StudentAPI;
 import cfg.samples.domain.Student;
 import cfg.samples.service.StudentService;
+import cfg.samples.service.exceptions.StudentNotFoundException;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = StudentAPI.class)
@@ -61,12 +62,15 @@ public class StudentAPITest {
 	}
 	
 	@Test
-	public void findAllTest() throws Exception {
+	public void findAllTestEmpty() throws Exception {
 		when(studentService.findAll()).thenReturn(new ArrayList<Student>());
 		mockMvc.perform(get("/api/v1/students"))
 			.andExpect(status().isOk())
 			.andExpect(content().json("[]"));
-		
+	}
+	
+	@Test
+	public void findAllTestElements() throws Exception {
 		when(studentService.findAll()).thenReturn(students);
 		mockMvc.perform(get("/api/v1/students"))
 			.andExpect(status().isOk())
@@ -75,12 +79,19 @@ public class StudentAPITest {
 	
 	@Test
 	public void findByIdTest() throws Exception {
-		when(studentService.findById(26L)).thenReturn(Optional.of(students.get(2)));
+		when(studentService.findById(26L)).thenReturn(students.get(2));
 		mockMvc.perform(get("/api/v1/students/26"))
 			.andExpect(status().isOk())
 			.andExpect(content().json("{\"id\":26,\"firstName\":\"Ernesto\",\"lastName\":\"Piero\"}"));
 		
-		when(studentService.findById(18L)).thenReturn(Optional.<Student>empty());
+		when(studentService.findById(18L)).thenThrow(StudentNotFoundException.class);
+		mockMvc.perform(get("/api/v1/students/18"))
+			.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	public void findByIdTestNotFound() throws Exception {
+		when(studentService.findById(18L)).thenThrow(StudentNotFoundException.class);
 		mockMvc.perform(get("/api/v1/students/18"))
 			.andExpect(status().isNotFound());
 	}
@@ -106,15 +117,22 @@ public class StudentAPITest {
 		st.setId(2L);
 		st.setFirstName("Pedro");
 		st.setLastName("Sarmiento");
-		
-		when(studentService.findById(2L)).thenReturn(Optional.of(students.get(1)));
+
 		when(studentService.update(2L, st)).thenReturn(st);
 		mockMvc.perform(put("/api/v1/students/2")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content("{\"firstName\": \"Pedro\", \"lastName\": \"Sarmiento\"}"))
 			.andExpect(status().isOk())
 			.andExpect(content().json("{\"id\":2, \"firstName\": \"Pedro\", \"lastName\": \"Sarmiento\"}"));
-		
+	}
+	
+	//@Test
+	public void updateTestNotFound() throws Exception {
+		Student st = new Student();
+		st.setFirstName("Pedro");
+		st.setLastName("Sarmiento");
+
+		when(studentService.update(33L, st)).thenThrow(StudentNotFoundException.class);
 		mockMvc.perform(put("/api/v1/students/33")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content("{\"firstName\": \"Pedro\", \"lastName\": \"Sarmiento\"}"))
@@ -123,11 +141,15 @@ public class StudentAPITest {
 	
 	@Test
 	public void deleteTest() throws Exception {
-		when(studentService.findById(1L)).thenReturn(Optional.of(students.get(0)));
 		mockMvc.perform(delete("/api/v1/students/1"))
 			.andExpect(status().isOk());
-		
+		verify(studentService).deleteById(1L);
+	}
+	
+	@Test
+	public void deleteNotFoundTest() throws Exception {
+		doThrow(StudentNotFoundException.class).when(studentService).deleteById(11L);
 		mockMvc.perform(delete("/api/v1/students/11"))
-		.andExpect(status().isNotFound());
+			.andExpect(status().isNotFound());
 	}
 }

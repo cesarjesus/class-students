@@ -8,8 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,21 +29,8 @@ public class Student {
 			cascade = {
 					CascadeType.PERSIST,
 					CascadeType.MERGE
-	})
-	@JoinTable(name = "enrollment", 
-		joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"), 
-		inverseJoinColumns = @JoinColumn(name ="class_code", referencedColumnName = "code"))
+	}, mappedBy = "students")
 	private Set<Course> courses;
-	
-	public void addEnrollment(Course course) {
-		courses.add(course);
-		course.getStudents().add(this);
-	}
-
-	public void removeEnrollment(Course course) {
-		courses.remove(course);
-		course.getStudents().remove(this);
-	}
 
 	@Override
 	public boolean equals(Object o) {

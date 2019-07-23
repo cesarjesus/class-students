@@ -1,7 +1,6 @@
 package cfg.samples.api;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cfg.samples.domain.Student;
 import cfg.samples.service.StudentService;
+import cfg.samples.service.exceptions.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -33,11 +33,14 @@ public class StudentAPI {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Student> findById(@PathVariable Long id) {
-		Optional<Student> student = studentService.findById(id);
-		if (!student.isPresent()) {
+		Student student;
+		try {
+			student = studentService.findById(id);
+		} catch (StudentNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(student.get());
+
+		return ResponseEntity.ok(student);
 	}
 	
 	@PostMapping
@@ -47,71 +50,37 @@ public class StudentAPI {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Student> update(@PathVariable Long id, @Valid @RequestBody Student student) {
-		Optional<Student> st = studentService.findById(id);
-		if (!st.isPresent()) {
+		Student st;
+		try {
+			st = studentService.update(id, student);
+		} catch (StudentNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(studentService.update(id, student));
+
+		return ResponseEntity.ok(st);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	@DeleteMapping("/{id}")
 	public ResponseEntity delete(@PathVariable Long id) {
-		Optional<Student> student = studentService.findById(id);
-		if (!student.isPresent() ) {
-			return ResponseEntity.notFound().build();
-		}
-		studentService.deleteById(id);
-		return ResponseEntity.ok().build();
-	}
-	
-	@GetMapping("/{id}/enrollment")
-	public ResponseEntity<List<String>> findAllEnrollment(@PathVariable Long id) {
-		Optional<Student> student = studentService.findById(id);
-		if (!student.isPresent() ) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		List<String> enrollments = studentService.findAllEnrollments(id);
-		return ResponseEntity.ok(enrollments);
-	}
-	
-	@GetMapping("/{id}/enrollment/{code}")
-	public ResponseEntity<String> findEnrollment(@PathVariable Long id, @PathVariable String code) {
-		Optional<Student> student = studentService.findById(id);
-		if (!student.isPresent() ) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		Optional<String> enrollment = studentService.findEnrollmentForStudent(id, code);
-		if (!enrollment.isPresent()) {
+		try {
+			studentService.deleteById(id);
+		} catch (StudentNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 
-		return ResponseEntity.ok(enrollment.get());
+		return ResponseEntity.ok().build();
 	}
 	
-	@SuppressWarnings("rawtypes")
-	@PostMapping("/{id}/enrollment/{code}")
-	public ResponseEntity addEnrollment(@PathVariable Long id, @PathVariable String code) {
-		Optional<Student> student = studentService.findById(id);
-		if (!student.isPresent() ) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		studentService.addEnrollmentForStudent(id, code);
-		return ResponseEntity.ok().build();
-	}
-
-	@SuppressWarnings("rawtypes")
-	@DeleteMapping("/{id}/enrollment/{code}")
-	public ResponseEntity removeEnrollment(@PathVariable Long id, @PathVariable String code){
-		Optional<Student> student = studentService.findById(id);
-		if (!student.isPresent()) {
+	@GetMapping("/{id}/enrolls")
+	public ResponseEntity<List<String>> findAllEnrolls(@PathVariable Long id) {
+		List<String> enrolls;
+		try {
+			enrolls = studentService.findAllEnrolls(id);
+		} catch (StudentNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 
-		studentService.removeEnrollmentForStudent(id, code);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(enrolls);
 	}
 }

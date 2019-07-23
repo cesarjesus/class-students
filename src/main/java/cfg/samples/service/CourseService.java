@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import cfg.samples.domain.Course;
+import cfg.samples.domain.Student;
 import cfg.samples.repository.CourseRepository;
+import cfg.samples.repository.StudentRepository;
 import cfg.samples.service.exceptions.CourseNotFoundException;
+import cfg.samples.service.exceptions.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -15,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class CourseService {
 
 	private final CourseRepository courseRepository;
+	private final StudentRepository studentRepository;
 	
 	public List<Course> findAll() {
 		return courseRepository.findAll();
@@ -48,5 +52,31 @@ public class CourseService {
 	public List<Long> findAllEnrollmentsByCode(String code) throws CourseNotFoundException {
 		this.findById(code);
 		return courseRepository.findAllEnrollmentsByCode(code);
+	}
+	
+	public void addEnrollmentForStudent(String code, Long id) throws StudentNotFoundException,
+																CourseNotFoundException {
+		Course course = this.findById(code);
+		Optional<Student> student = studentRepository.findById(id);
+		
+		if (!student.isPresent()) {
+			throw new StudentNotFoundException();
+		}
+
+		course.addEnrollment(student.get());
+		courseRepository.save(course);
+	}
+	
+	public void removeEnrollmentForStudent(String code, Long id) throws StudentNotFoundException,
+																	CourseNotFoundException {
+		Course course = this.findById(code);
+		Optional<Student> student = studentRepository.findById(id);
+		
+		if (!student.isPresent()) {
+			throw new StudentNotFoundException();
+		}
+		
+		course.removeEnrollment(student.get());
+		courseRepository.save(course);
 	}
 }

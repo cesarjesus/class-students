@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,9 +28,21 @@ public class Course {
 		cascade = {
 				CascadeType.PERSIST,
 				CascadeType.MERGE
-		},
-		mappedBy = "claszs")
+	})
+	@JoinTable(name = "enrollment", 
+		joinColumns = @JoinColumn(name = "course_code", referencedColumnName = "code"), 
+		inverseJoinColumns = @JoinColumn(name ="student_id", referencedColumnName = "id"))
 	private Set<Student> students;
+	
+	public void addEnrollment(Student student) {
+		this.students.add(student);
+		student.getCourses().add(this);
+	}
+	
+	public void removeEnrollment(Student student) {
+		this.students.remove(student);
+		student.getCourses().remove(this);
+	}
 	
 	@Override
 	public boolean equals(Object o) {

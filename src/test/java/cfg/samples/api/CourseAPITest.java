@@ -56,12 +56,15 @@ public class CourseAPITest {
 	}
 	
 	@Test
-	public void findAllTest( ) throws Exception {
+	public void findAllEmptyTest() throws Exception {
 		when(courseService.findAll()).thenReturn(new ArrayList<Course>());
 		mockMvc.perform(get("/api/v1/course"))
 			.andExpect(status().isOk())
 			.andExpect(content().json("[]"));
-		
+	}
+	
+	@Test
+	public void findAllTest() throws Exception {
 		when(courseService.findAll()).thenReturn(courses);
 		mockMvc.perform(get("/api/v1/course"))
 			.andExpect(status().isOk())
@@ -74,10 +77,12 @@ public class CourseAPITest {
 		mockMvc.perform(get("/api/v1/course/1B1C"))
 			.andExpect(status().isOk())
 			.andExpect(content().json("{\"code\":\"1B1C\",\"title\":\"Math\",\"description\":\"What Math is?\"}"));
-		
+	}
+
+	@Test
+	public void findByCodeNotFoundTest() throws Exception {
 		when(courseService.findById("X1Z1")).thenThrow(CourseNotFoundException.class);
 		mockMvc.perform(get("/api/v1/course/X1Z1"))
 			.andExpect(status().isNotFound());
 	}
-
 }

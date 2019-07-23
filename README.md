@@ -1,6 +1,6 @@
 **Simple API**
 
-Simple API project using spring boot and JPA to persistense layer.
+Simple REST API project using spring boot and JPA to persistense layer.
 
 **Run**
 
@@ -19,25 +19,23 @@ It will run at http://localhost:8080, by default the storage back-end is in memo
 * PUT /api/v1/students/{id}
 * DELETE /api/v1/students/{id}
 
-**Class**
+**Course**
 
-* Class code is not auto-generated and must be especified at creation time.
+* Course code is not auto-generated and must be especified at creation time.
 * Endpoint: /api/v1/course
-* GET /api/v1/course ; /api/v1/class/{code}
+* GET /api/v1/course ; /api/v1/course/{code}
 * POST: `{"code":"01C", "title":"Ciense", "description":"A Ciense course"}`
 * PUT /api/v1/course/{code}
 * DELETE /api/v1/course/{code}
 
-**Student enrollment**
+**Course enrollment**
 
-* Endpoint: /api/v1/students/{id}/enrollment
+* Endpoint: /api/v1/course/{id}/enrollment
 * To add a student into a course
-* POST: /api/v1/students/{id}/enrollment/{couse-code}
+* POST: /api/v1/course/{course-code}/enrollment/{student-id}
 * To remove an enrollment
-* DELETE: /api/v1/students/{id}/enrollment/{course-code}
+* DELETE: /api/v1/course/{course-code}/enrollment/{student-id}
 
-**Class enrolls**
+**Student enrolls**
 
-* Endpoint: /api/v1/course/{code}/enrolls
-* To get course enrolls
-* GET /api/v1/course/{code}/enrolls
+* Endpoint: /api/v1/student/{id}/enrolls

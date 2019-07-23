@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cfg.samples.domain.Course;
 import cfg.samples.service.CourseService;
 import cfg.samples.service.exceptions.CourseNotFoundException;
+import cfg.samples.service.exceptions.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -82,5 +83,29 @@ public class CourseAPI {
 		}
 
 		return ResponseEntity.ok(enrollments);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@PostMapping("/{code}/enrollment/{studentId}")
+	public ResponseEntity addEnrollment(@PathVariable String code, @PathVariable Long studentId) {
+		try {
+			courseService.addEnrollmentForStudent(code, studentId);
+		} catch (StudentNotFoundException | CourseNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+
+		return ResponseEntity.ok().build();
+	}
+
+	@SuppressWarnings("rawtypes")
+	@DeleteMapping("/{code}/enrollment/{studentId}")
+	public ResponseEntity removeEnrollment(@PathVariable String code, @PathVariable Long studentId){
+		try {
+			courseService.removeEnrollmentForStudent(code, studentId);
+		} catch (StudentNotFoundException | CourseNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+
+		return ResponseEntity.ok().build();
 	}
 }
